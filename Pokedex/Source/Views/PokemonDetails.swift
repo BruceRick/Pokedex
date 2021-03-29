@@ -10,11 +10,13 @@ import Combine
 
 struct PokemonDetails: View {
   let pokemonName: String
+
   @State private var pokemon: API.Pokemon? { didSet { didSetPokemon() } }
   @State private var types: [PokemonType] = []
   @State private var cancellable: AnyCancellable?
   @State private var imageLoader = ImageLoader(urlString: "")
-  @State var sprite: UIImage = UIImage()
+  @State private var sprite: UIImage = UIImage()
+  @State private var loaded = false
 
   struct PokemonType: Identifiable {
     var name: String
@@ -37,9 +39,8 @@ struct PokemonDetails: View {
       }
       Spacer()
     }
-    .onAppear {
-      fetchPokemonDetails()
-    }
+    .onAppear(perform: onAppear)
+    .loading(cancellable != nil)
   }
 
   func fetchPokemonDetails() {
@@ -50,10 +51,18 @@ struct PokemonDetails: View {
       .assign(to: \.pokemon, on: self)
   }
 
+  func onAppear() {
+    if !loaded {
+      fetchPokemonDetails()
+    }
+    loaded = true
+  }
+
   func didSetPokemon() {
     if let pokemon = pokemon {
       imageLoader = ImageLoader(urlString: pokemon.sprites.frontDefault)
       types = pokemon.types.map { PokemonType(name: $0.type.name) }
     }
+    cancellable = nil
   }
 }
