@@ -15,9 +15,3 @@ extension API {
     var pokedexes: [ListItem]
   }
 }
-
-extension API.Game {
-  static func pokedexList(from game: API.Game) -> [ListViewItem] {
-    game.pokedexes.map { ListViewItem(name: $0.name) }
-  }
-}

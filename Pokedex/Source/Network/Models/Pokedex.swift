@@ -11,9 +11,9 @@ extension API {
   struct Pokedex: Decodable {
     var name: String
     var id: Int
-    var pokemonEntries: [Entry]
+    var pokemonEntries: [Pokemon]
 
-    struct Entry: Decodable {
+    struct Pokemon: Decodable {
       var entryNumber: Int
       var pokemonSpecies: Species
 
@@ -21,11 +21,5 @@ extension API {
         var name: String
       }
     }
-  }
-}
-
-extension API.Pokedex {
-  static func pokemonList(from game: API.Pokedex) -> [ListViewItem] {
-    game.pokemonEntries.map { ListViewItem(name: $0.pokemonSpecies.name) }
   }
 }

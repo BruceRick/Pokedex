@@ -29,9 +29,9 @@ public struct LoadingModifier: ViewModifier {
   var loadingView: some View {
     Image("Loading")
       .resizable()
-      .frame(width: 100, height: 100)
+      .frame(width: 50, height: 50)
       .rotationEffect(.degrees(degrees))
-      .padding(.bottom, 100)
+      .padding(.bottom, 20)
       .onAppear {
         let repeated = Animation
           .easeInOut(duration: 0.75)

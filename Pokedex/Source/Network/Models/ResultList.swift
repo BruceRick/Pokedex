@@ -12,9 +12,3 @@ extension API {
     var results: [ListItem]
   }
 }
-
-extension API.ResultList {
-  static func list(from resultList: API.ResultList) -> [ListViewItem] {
-    resultList.results.map { ListViewItem(name: $0.name) }
-  }
-}
