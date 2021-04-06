@@ -44,33 +44,16 @@ struct PokemonDetailsView: View {
 
   func pokemonTypes(_ types: [String]) -> some View {
     Section(header: Text("Type")) {
-      HStack(spacing: 20) {
-        NavigationLink(destination: EmptyView()) {
+      NavigationLink(destination: PokemonTypesListView(types: types)) {
+        HStack(spacing: 20) {
           ForEach(types.identifiable) { typeName in
-            typeCell(typeName.value)
+            PokemonTypeView(type: typeName.value)
+            
           }
         }
+        .padding([.vertical, .trailing], 10)
       }
-      .padding(.vertical, 10)
     }
-  }
-
-  func typeCell(_ name: String) -> some View {
-    HStack(alignment: .center) {
-      Spacer()
-      Image(name)
-        .resizable()
-        .frame(width: 20, height: 20)
-      Text(name.capitalized)
-        .frame(alignment: .leading)
-        .font(.headline)
-        .foregroundColor(.white)
-      .buttonStyle(PlainButtonStyle())
-      Spacer()
-    }
-    .padding(10)
-    .background(Color(name))
-    .clipShape(Capsule())
   }
 
   func pokemon(from pokemon: API.Pokemon) -> API.Pokemon {

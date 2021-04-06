@@ -14,6 +14,7 @@ extension API {
     case pokedexes
     case pokedex(String)
     case pokemon(String)
+    case type(String)
     
     var path: String {
       switch self {
@@ -27,6 +28,8 @@ extension API {
         return "\(Self.pokedexes.path)/\(name)"
       case .pokemon(let name):
         return "pokemon/\(name)"
+      case .type(let name):
+        return "type/\(name)"
       }
     }
   }

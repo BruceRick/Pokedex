@@ -27,10 +27,14 @@ extension API {
       let publisher = URLSession.shared
         .dataTaskPublisher(for: urlRequest)
         .tryMap { result -> API.Response<T> in
-          try? debugPrint(response: result.response, data: result.data)
+          //try? debugPrint(response: result.response, data: result.data)
           let data = try API.jsonDecoder.decode(T.self, from: result.data)
           return API.Response(data: data, response: result.response)
         }
+//        .mapError { error -> Error in
+//          print(error)
+//          return error
+//        }
         .receive(on: API.scheduler)
         .eraseToAnyPublisher()
       return publisher

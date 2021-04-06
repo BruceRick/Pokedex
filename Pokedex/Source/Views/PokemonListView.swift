@@ -14,7 +14,7 @@ struct PokemonListView: View {
     APIContentView(endpoint: .pokedex(pokedex), responseMap: pokemon) { pokemonList in
       List(pokemonList ?? []) { pokemonName in
         NavigationLink(destination: PokemonDetailsView(pokemonName: pokemonName.value)) {
-          Text(pokemonName.value)
+          Text(pokemonName.value.capitalized)
         }
       }
       .navigationTitle(pokedex)
