@@ -8,11 +8,6 @@
 import SwiftUI
 
 struct PokedexListView: View {
-  struct Pokedex: Identifiable {
-    var name: String
-    var id: String { name }
-  }
-
   var game: String? = nil
 
   @ViewBuilder var body: some View {
@@ -25,32 +20,30 @@ struct PokedexListView: View {
   }
 
   var pokedexList: some View {
-    APIContentView(endpoint: .pokedexes, responseMap: pokedexes(resultList:)) { (pokedexes: [Pokedex]?) in
+    APIContentView(endpoint: .pokedexes, responseMap: pokedexes(resultList:)) { pokedexes in
       pokedexList(pokedexes: pokedexes ?? [])
     }
   }
 
   func pokedexList(game: String) -> some View {
-    APIContentView(endpoint: .game(game), responseMap: pokedexes(game:)) { (pokedexes: [Pokedex]?) in
+    APIContentView(endpoint: .game(game), responseMap: pokedexes(game:)) { pokedexes in
       pokedexList(pokedexes: pokedexes ?? []).navigationTitle(game)
     }
   }
 
-  func pokedexList(pokedexes: [Pokedex]) -> some View {
-    List {
-      ForEach(pokedexes) { pokedex in
-        NavigationLink(destination: PokemonListView(pokedex: pokedex.name)) {
-          Text(pokedex.name)
-        }
+  func pokedexList(pokedexes: [IdentifiableString]) -> some View {
+    List(pokedexes) { pokedexName in
+      NavigationLink(destination: PokemonListView(pokedex: pokedexName.value)) {
+        Text(pokedexName.value)
       }
     }
   }
 
-  func pokedexes(resultList: API.ResultList) -> [Pokedex] {
-    resultList.results.map { Pokedex(name: $0.name) }
+  func pokedexes(resultList: API.ResultList) -> [IdentifiableString] {
+    resultList.results.map { $0.name }.identifiable
   }
 
-  func pokedexes(game: API.Game) -> [Pokedex] {
-    game.pokedexes.map { Pokedex(name: $0.name) }
+  func pokedexes(game: API.Game) -> [IdentifiableString] {
+    game.pokedexes.map { $0.name }.identifiable
   }
 }

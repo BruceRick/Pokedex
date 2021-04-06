@@ -8,27 +8,20 @@
 import SwiftUI
 
 struct PokemonListView: View {
-  struct Pokemon: Identifiable {
-    var name: String
-    var id: String { name }
-  }
-
   var pokedex: String
 
   var body: some View {
-    APIContentView(endpoint: .pokedex(pokedex), responseMap: pokemon) { (pokemonList: [Pokemon]?) in
-      List {
-        ForEach(pokemonList ?? []) { pokemon in
-          NavigationLink(destination: PokemonDetailsView(pokemonName: pokemon.name)) {
-            Text(pokemon.name)
-          }
+    APIContentView(endpoint: .pokedex(pokedex), responseMap: pokemon) { pokemonList in
+      List(pokemonList ?? []) { pokemonName in
+        NavigationLink(destination: PokemonDetailsView(pokemonName: pokemonName.value)) {
+          Text(pokemonName.value)
         }
       }
       .navigationTitle(pokedex)
     }
   }
 
-  func pokemon(pokedex: API.Pokedex) -> [Pokemon] {
-    pokedex.pokemonEntries.map { Pokemon(name: $0.pokemonSpecies.name) }
+  func pokemon(pokedex: API.Pokedex) -> [IdentifiableString] {
+    pokedex.pokemonEntries.map { $0.pokemonSpecies.name }.identifiable
   }
 }

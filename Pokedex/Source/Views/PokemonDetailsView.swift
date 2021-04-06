@@ -13,42 +13,74 @@ struct PokemonDetailsView: View {
 
   @State private var imageLoader = ImageLoader(urlString: "")
   @State private var pokemonImage = UIImage()
-
-  struct Pokemon {
-    var spriteURLString: String
-    var types: [PokemonType]
-  }
-
-  struct PokemonType: Identifiable {
-    var name: String
-    var id: String { name }
-  }
   
   @ViewBuilder var body: some View {
-    APIContentView(endpoint: .pokemon(pokemonName), responseMap: pokemon) { (pokemon: Pokemon?) in
-      VStack {
-        Image(uiImage: pokemonImage)
-          .resizable()
-          .aspectRatio(contentMode: .fit)
-          .frame(width: 300, height: 300)
-          .loading(pokemonImage == UIImage())
-        ForEach(pokemon?.types ?? []) { type in
-          Text(type.name)
-        }
-        Spacer()
-      }
-      .navigationTitle(pokemonName)
-      .onAppear {
-        if let urlString = pokemon?.spriteURLString {
-          imageLoader = ImageLoader(urlString: urlString)
-        }
-      }
-      .onReceive(imageLoader.didChange, perform: imageLoaded)
+    APIContentView(endpoint: .pokemon(pokemonName), responseMap: pokemon) { pokemon in
+      content(pokemon: pokemon)
+        .navigationTitle(pokemonName.capitalized)
+        .onAppear { loadSprite(pokemon: pokemon) }
+        .onReceive(imageLoader.didChange, perform: imageLoaded)
     }
   }
 
-  func pokemon(from pokemon: API.Pokemon) -> Pokemon {
-    Pokemon(spriteURLString: pokemon.sprites.frontDefault, types: pokemon.types.map { PokemonType(name: $0.type.name) })
+  func content(pokemon: API.Pokemon?) -> some View {
+    List {
+      pokemonSprite
+      pokemonTypes(pokemon?.types.map { $0.type.name } ?? [])
+    }
+  }
+
+  var pokemonSprite: some View {
+    HStack {
+      Spacer()
+      Image(uiImage: pokemonImage)
+        .resizable()
+        .frame(width: 200, height: 200)
+        .loading(pokemonImage == UIImage())
+        .padding(.top, 20)
+      Spacer()
+    }
+  }
+
+  func pokemonTypes(_ types: [String]) -> some View {
+    Section(header: Text("Type")) {
+      HStack(spacing: 20) {
+        NavigationLink(destination: EmptyView()) {
+          ForEach(types.identifiable) { typeName in
+            typeCell(typeName.value)
+          }
+        }
+      }
+      .padding(.vertical, 10)
+    }
+  }
+
+  func typeCell(_ name: String) -> some View {
+    HStack(alignment: .center) {
+      Spacer()
+      Image(name)
+        .resizable()
+        .frame(width: 20, height: 20)
+      Text(name.capitalized)
+        .frame(alignment: .leading)
+        .font(.headline)
+        .foregroundColor(.white)
+      .buttonStyle(PlainButtonStyle())
+      Spacer()
+    }
+    .padding(10)
+    .background(Color(name))
+    .clipShape(Capsule())
+  }
+
+  func pokemon(from pokemon: API.Pokemon) -> API.Pokemon {
+    pokemon
+  }
+
+  func loadSprite(pokemon: API.Pokemon?) {
+    if let urlString = pokemon?.sprites.frontDefault {
+      imageLoader = ImageLoader(urlString: urlString)
+    }
   }
 
   func imageLoaded(data: Data) {

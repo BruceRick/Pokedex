@@ -5,7 +5,6 @@
 //  Created by Bruce Rick on 2021-03-28.
 //
 
-import Foundation
 import SwiftUI
 
 public struct LoadingModifier: ViewModifier {
