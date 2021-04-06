@@ -27,14 +27,14 @@ struct PokedexListView: View {
 
   func pokedexList(game: String) -> some View {
     APIContentView(endpoint: .game(game), responseMap: pokedexes(game:)) { pokedexes in
-      pokedexList(pokedexes: pokedexes ?? []).navigationTitle(game)
+      pokedexList(pokedexes: pokedexes ?? []).navigationTitle(game.capitalized)
     }
   }
 
   func pokedexList(pokedexes: [IdentifiableString]) -> some View {
     List(pokedexes) { pokedexName in
       NavigationLink(destination: PokemonListView(pokedex: pokedexName.value)) {
-        Text(pokedexName.value)
+        Text(pokedexName.value.capitalized)
       }
     }
   }

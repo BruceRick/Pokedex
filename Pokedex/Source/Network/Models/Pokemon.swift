@@ -10,19 +10,36 @@ import Foundation
 extension API {
   struct Pokemon: Decodable {
     var name: String
+    var baseExperience: Int
+    var height: Int
+    var weight: Int
     var sprites: Sprites
-    var types: [PokemonTypes]
+    var types: [TypeListItem]
+    var abilities: [AbilityListItem]
+    var stats: [StatListItem]
+    var moves: [MoveListItem]
 
     struct Sprites: Decodable {
       var frontDefault: String
     }
 
-    struct PokemonTypes: Decodable {
-      var type: PokemonType
+    struct TypeListItem: Decodable {
+      var type: ListItem
+    }
 
-      struct PokemonType: Decodable {
-        var name: String
-      }
+    struct AbilityListItem: Decodable {
+      var isHidden: Bool
+      var ability: ListItem
+    }
+
+    struct StatListItem: Decodable {
+      var baseStat: Int
+      var effort: Int
+      var stat: ListItem
+    }
+
+    struct MoveListItem: Decodable {
+      var move: ListItem
     }
   }
 }

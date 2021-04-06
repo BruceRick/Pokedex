@@ -21,6 +21,8 @@ struct APIContentView<Content: View, ResponseObject: Decodable, Data>: View {
     content(data)
       .loading(state == .initial || state == .loading)
       .onAppear(perform: loadData)
+      .opacity(state == .error ? 0 : 1)
+      .overlay(errorView)
   }
 
   func loadData() {
@@ -39,6 +41,16 @@ struct APIContentView<Content: View, ResponseObject: Decodable, Data>: View {
       state = .success
     case .none:
       state = .error
+    }
+  }
+
+  @ViewBuilder var errorView: some View {
+    if state == .error {
+      Text("An unexpected error ocurred")
+        .foregroundColor(Color.red)
+        .fontWeight(.bold)
+    } else {
+      EmptyView()
     }
   }
 }

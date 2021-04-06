@@ -12,7 +12,7 @@ struct GamesListView: View {
     APIContentView(endpoint: .games, responseMap: games) { gameNames in
       List(gameNames ?? []) { gameName in
         NavigationLink(destination: PokedexListView(game: gameName.value)) {
-          Text(gameName.value)
+          Text(gameName.value.capitalized)
         }
       }
     }

@@ -1,5 +1,5 @@
 //
-//  PokemonTypeView.swift
+//  TypeView.swift
 //  Pokedex
 //
 //  Created by Bruce Rick on 2021-04-05.
@@ -9,7 +9,7 @@ import Foundation
 
 import SwiftUI
 
-struct PokemonTypeView: View {
+struct TypeView: View {
   var type: String
 
   var body: some View {

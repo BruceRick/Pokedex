@@ -12,12 +12,12 @@ extension API {
     var damageRelations: DamageRelations
 
     struct DamageRelations: Decodable {
-      var doubleDamageFrom: [API.ListItem]
-      var doubleDamageTo: [API.ListItem]
-      var halfDamageFrom: [API.ListItem]
-      var halfDamageTo: [API.ListItem]
-      var noDamageFrom: [API.ListItem]
-      var noDamageTo: [API.ListItem]
+      var doubleDamageFrom: [ListItem]
+      var doubleDamageTo: [ListItem]
+      var halfDamageFrom: [ListItem]
+      var halfDamageTo: [ListItem]
+      var noDamageFrom: [ListItem]
+      var noDamageTo: [ListItem]
     }
   }
 }

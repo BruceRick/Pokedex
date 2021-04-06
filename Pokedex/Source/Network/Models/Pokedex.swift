@@ -15,11 +15,7 @@ extension API {
 
     struct Pokemon: Decodable {
       var entryNumber: Int
-      var pokemonSpecies: Species
-
-      struct Species: Decodable {
-        var name: String
-      }
+      var pokemonSpecies: ListItem
     }
   }
 }
